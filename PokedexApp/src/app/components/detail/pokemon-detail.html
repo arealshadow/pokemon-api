@@ -1,0 +1,91 @@
+@if (service.detailLoading()) {
+  <div class="empty-state"><span class="spinner"></span> Loading Pokémon…</div>
+} @else if (service.detailError()) {
+  <div class="empty-state">
+    <h2>Couldn't load this Pokémon</h2>
+    <p>{{ service.detailError() }}</p>
+    <a class="btn primary" routerLink="/search">Back to search</a>
+  </div>
+} @else {
+  @if (service.detail(); as p) {
+    <a class="back" routerLink="/">← Home</a>
+
+
+
+
+    <div class="detail">
+
+      <div class="detail-header">
+        <span class="detail-id">{{ idLabel(p) }}</span>
+        <h1 class="detail-name">{{ p.name | titlecase }}</h1>
+      </div>
+    
+      <div class="detail-body">
+        <div class="detail-media">
+          <img [src]="spriteFor(p)" [alt]="p.name" [class.shiny]="shiny()" />
+          @if (shiny()) { <span class="spark" aria-hidden="true">✦</span> }
+        </div>
+
+        <div class="detail-info">
+
+          <div class="types">
+            <span class="types-label">Type</span>
+            @for (t of p.types; track t.slot) {
+              <span class="type" [style.background]="colorFor(t.type.name)" [style.color]="textFor(t.type.name)">{{ t.type.name }}</span>
+            }
+          </div>
+
+          <div class="detail-actions">
+            <button
+              class="btn primary compact"
+              [class.added]="collected(p.id)"
+              [attr.aria-pressed]="collected(p.id)"
+              (click)="toggle(p)"
+            >
+              {{ collected(p.id) ? '✓ In Pokedex' : '+ Add to Pokedex' }}
+            </button>
+
+            @let slot = favSlotFor(p);
+            <button
+              class="btn fav-btn compact"
+              [class.pinned]="slot != null"
+              [class.assigning]="isAssigning(p)"
+              [attr.aria-pressed]="slot != null"
+              (click)="toggleFav(p)"
+            >
+              {{ slot != null ? '★ Slot ' + slot : isAssigning(p) ? 'Cancel pin' : '★ Pin to slot' }}
+            </button>
+
+            <button
+              class="btn cry-btn compact"
+              [class.playing]="crying()"
+              [disabled]="!(p.cries && (p.cries.latest || p.cries.legacy))"
+              [attr.aria-pressed]="crying()"
+              (click)="playCry(p)"
+            >
+              {{ crying() ? '■ Stop cry' : '🔊 Cry' }}
+            </button>
+
+            <button
+              class="btn shiny-btn compact"
+              [class.on]="shiny()"
+              [disabled]="!hasShiny(p)"
+              [attr.aria-pressed]="shiny()"
+              (click)="toggleShiny()"
+            >
+              {{ shiny() ? '✦ Shiny on' : '✧ Shiny' }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+  } @else {
+    <div class="empty-state">
+      <p>Nothing to show here.</p>
+      <a class="btn primary" routerLink="/search">Back to search</a>
+    </div>
+  }
+}

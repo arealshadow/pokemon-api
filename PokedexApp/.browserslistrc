@@ -1,0 +1,12 @@
+# This file is used by the build system to adjust CSS and JS output to support the specified browsers below.
+# For additional information regarding the format and rule options, please see:
+# https://github.com/browserslist/browserslist#queries
+
+# For the full list of supported browsers by the Angular framework, please see:
+# https://angular.dev/tools/browsers
+
+# You can change this to set which browsers to target.
+last 1 Chrome version
+last 1 Firefox version
+last 1 Safari version
+last 1 Edge version

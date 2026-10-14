@@ -1,0 +1,35 @@
+<section class="hero">
+  <h1>Search the Pokédex</h1>
+  <p>Find any Pokémon, add it to your collection, then tap it to see everything about it.</p>
+  <label class="search">
+    <span aria-hidden="true">🔎</span>
+    <input
+      type="search"
+      name="pokemon"
+      placeholder="Type a name… e.g. pikachu, charizard, eevee"
+      [value]="service.searchQuery()"
+      (input)="service.searchQuery.set($any($event.target).value)"
+      autocomplete="off"
+    />
+  </label>
+</section>
+
+<div class="results-meta">
+  @if (service.loadingNames()) {
+    <span class="spinner"></span> Loading Pokémon…
+  } @else {
+    <span>
+      {{ service.results().length }} Pokémon
+      @if (service.searchQuery()) { matching “{{ service.searchQuery() }}” }
+    </span>
+  }
+</div>
+
+<div class="grid">
+  @for (p of service.results(); track p.id; let i = $index) {
+    <app-pokemon-card [pokemon]="p" [focused]="i === service.focus()" />
+  }
+  @empty {
+    <div class="empty">No Pokémon found — try a different name.</div>
+  }
+</div>

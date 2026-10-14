@@ -1,1 +1,1486 @@
-/* You can add global styles to this file, and also import other style files */
+/* ============================================================
+   Pokédex device theme — the whole app is a red handheld device
+   with a hinged two-panel body, white-framed dark screen,
+   blue keypad, D-pad and LED lights.
+   ============================================================ */
+:root {
+  --red: #e01a28;
+  --red-hi: #f04350;
+  --red-deep: #b0121f;
+  --red-dark: #7c0d15;
+  --outline: #17181f;
+  --screen: #0e0f16;
+  --screen-2: #1c1e2b;
+  --panel-line: rgba(0, 0, 0, 0.35);
+  --text: #e8eaf2;
+  --muted: #9aa0b8;
+  --green-led: #3ce06a;
+  --key-blue: #35a3e8;
+  --key-blue-deep: #14507c;
+  --font-pixel: 'Press Start 2P', 'Courier New', monospace;
+  --maxw: 1100px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(900px 500px at 50% -10%, rgba(224, 26, 40, 0.28), transparent 60%),
+    radial-gradient(1400px 700px at 50% 110%, rgba(53, 163, 232, 0.12), transparent 60%),
+    #191a26;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+/* ---------------- The device body ---------------- */
+.device {
+  position: relative;
+  max-width: var(--maxw);
+  margin: 12px auto 12px;
+  padding: 26px;
+  display: grid;
+  grid-template-columns: 1fr 30px 1fr;
+  align-items: stretch;
+  background: linear-gradient(155deg, var(--red-hi) 0%, var(--red) 45%, var(--red-deep) 100%);
+  border: 5px solid var(--outline);
+  border-radius: 28px;
+  box-shadow:
+    0 40px 80px rgba(0, 0, 0, 0.55),
+    inset 0 3px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -10px 24px rgba(0, 0, 0, 0.28);
+}
+
+.panel {
+  padding: 4px 10px 8px;
+  min-width: 0;
+}
+
+.panel-left {
+  text-align: left;
+}
+
+/* ---------------- Hinge ---------------- */
+.hinge {
+  position: relative;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.4),
+    rgba(0, 0, 0, 0.08) 35%,
+    rgba(0, 0, 0, 0.08) 65%,
+    rgba(0, 0, 0, 0.4)
+  );
+  border-radius: 12px;
+}
+
+.hinge-knob {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 100%;
+  border-radius: 9px;
+  background: linear-gradient(var(--red), var(--red-dark));
+  border: 4px solid var(--outline);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* ---------------- Left: lens + LEDs ---------------- */
+.panel-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 6px 16px;
+}
+
+.lens {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #eaf8ff 0 16%, #7fd0ff 32%, #1f7fd6 64%, #0d4f97 100%);
+  border: 5px solid var(--outline);
+  box-shadow:
+    inset 0 -8px 14px rgba(0, 0, 0, 0.35),
+    0 5px 10px rgba(0, 0, 0, 0.35);
+}
+
+.leds {
+  display: flex;
+  gap: 12px;
+  padding-right: 10px;
+}
+
+.led {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 3px solid var(--outline);
+  background: #3a3b46;
+  opacity: 0.5;
+  transition: background 0.2s, box-shadow 0.2s, opacity 0.2s;
+}
+
+.led.lit {
+  opacity: 1;
+}
+
+.led.red.lit {
+  background: #ff2d3f;
+  box-shadow: 0 0 12px #ff2d3f;
+}
+
+.led.amber.lit {
+  background: #ffc93c;
+  box-shadow: 0 0 12px #ffc93c;
+  animation: led-blink 0.9s steps(2, start) infinite;
+}
+
+.led.green.lit {
+  background: var(--green-led);
+  box-shadow: 0 0 12px var(--green-led);
+}
+
+@keyframes led-blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+/* ---------------- Left: screen ---------------- */
+.screen-frame {
+  background: linear-gradient(#f7f7f2, #e7e7e0);
+  border: 5px solid var(--outline);
+  border-radius: 16px;
+  padding: 10px 12px 14px;
+  box-shadow:
+    inset 0 4px 10px rgba(0, 0, 0, 0.22),
+    0 6px 14px rgba(0, 0, 0, 0.3);
+}
+
+.eyes {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.eye {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ff7b84, #d81f2b 65%);
+  border: 2px solid var(--outline);
+}
+
+.screen {
+  background: radial-gradient(130% 100% at 50% 0%, var(--screen-2), var(--screen) 75%);
+  border: 4px solid var(--outline);
+  border-radius: 10px;
+  overflow-y: auto;
+  /* Consistent body size on every route (home / search / detail). Capped so the
+     whole device fits shorter viewports without a page scrollbar; anything that
+     still overflows scrolls inside the screen. */
+  height: min(540px, calc(100vh - 360px));
+  padding: 10px;
+  color: var(--text);
+  scrollbar-width: thin;
+  scrollbar-color: #34384c transparent;
+}
+
+.screen::-webkit-scrollbar {
+  width: 8px;
+}
+
+.screen::-webkit-scrollbar-thumb {
+  background: #34384c;
+  border-radius: 8px;
+}
+
+/* ---------------- Left: D-pad + A/B ---------------- */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 20px;
+  padding: 0 4px;
+}
+
+.dpad {
+  display: grid;
+  grid-template-columns: repeat(3, 30px);
+  grid-template-rows: repeat(3, 30px);
+}
+
+.dpad-btn {
+  background: linear-gradient(#3a3d4e, #262836);
+  border: 4px solid var(--outline);
+  padding: 0;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.45), inset 0 2px 0 rgba(255, 255, 255, 0.14);
+  transition: transform 0.06s, box-shadow 0.06s;
+}
+
+.dpad-btn:hover {
+  background: linear-gradient(#454960, #2b2d3e);
+}
+
+.dpad-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
+}
+
+.dpad-btn.up {
+  grid-column: 2;
+  grid-row: 1;
+  border-radius: 8px 8px 0 0;
+}
+
+.dpad-btn.left {
+  grid-column: 1;
+  grid-row: 2;
+  border-radius: 8px 0 0 8px;
+}
+
+.dpad-center {
+  grid-column: 2;
+  grid-row: 2;
+  display: grid;
+  place-items: center;
+}
+
+.dpad-center::after {
+  content: '';
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #262836;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.dpad-btn.down {
+  grid-column: 2;
+  grid-row: 3;
+  border-radius: 0 0 8px 8px;
+}
+
+.dpad-btn.right {
+  grid-column: 3;
+  grid-row: 2;
+  border-radius: 0 8px 8px 0;
+}
+
+.pills {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-self: center;
+  padding: 0 6px;
+}
+
+.pill {
+  width: 100px;
+  height: 15px;
+  border-radius: 999px;
+  border: 3px solid var(--outline);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.3);
+}
+
+.pill.red {
+  background: #d81f2b;
+}
+
+.pill.blue {
+  background: var(--key-blue);
+}
+
+.ab {
+  display: flex;
+  gap: 12px;
+}
+
+.ab-btn {
+  width: 58px;
+  height: 36px;
+  border-radius: 12px;
+  border: 4px solid var(--outline);
+  font-family: var(--font-pixel);
+  font-size: 11px;
+  color: #08260f;
+  background: linear-gradient(#5ccb6a, #37993f);
+  box-shadow: 0 5px 0 #1d5a24, inset 0 2px 0 rgba(255, 255, 255, 0.4);
+  transition: transform 0.06s, box-shadow 0.06s;
+}
+
+.ab-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 #1d5a24, inset 0 2px 0 rgba(255, 255, 255, 0.4);
+}
+
+
+/* ---------------- Right: status screen ---------------- */
+.status-screen {
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.03) 0 2px, transparent 2px 4px),
+    #0b0c12;
+  border: 5px solid var(--outline);
+  border-radius: 12px;
+  padding: 0px 10px;
+  font-family: var(--font-pixel);
+  color: var(--green-led);
+  text-shadow: 0 0 8px rgba(60, 224, 106, 0.55);
+  box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.7);
+}
+
+.status-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 10px;
+  padding: 7px 0;
+}
+
+.status-line + .status-line {
+  border-top: 1px dashed rgba(60, 224, 106, 0.25);
+}
+
+.status-key {
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+.status-value {
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------------- Right: keypad ---------------- */
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0px;
+  margin-top: 5px;
+}
+
+.key {
+  padding: 13px 2px 12px;
+  border: 1px solid var(--outline);
+  font-family: var(--font-pixel);
+  font-size: 9px;
+  line-height: 1.4;
+  color: #062338;
+  background: linear-gradient(#6cc0f5, var(--key-blue) 70%);
+  box-shadow: 0 5px 0 var(--key-blue-deep), inset 0 2px 0 rgba(255, 255, 255, 0.55);
+  transition: transform 0.06s, box-shadow 0.06s, filter 0.12s;
+}
+
+.key:hover {
+  filter: brightness(1.08);
+}
+
+.key:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--key-blue-deep), inset 0 2px 0 rgba(255, 255, 255, 0.55);
+}
+
+.key-number {
+  font-size: 10px;
+}
+
+/* ---------------- Right: speaker + stats screen ---------------- */
+.speaker {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 0px 0px 5px;
+}
+
+.speaker-pad {
+  flex: 1;
+  height: 40px;
+  border-radius: 10px;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0 4px, transparent 4px 10px),
+    linear-gradient(#17492f, #0d2f1c);
+  border: 4px solid var(--outline);
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* ================= In-screen content ================= */
+h1,
+h2,
+h3 {
+  margin: 0 0 0.4em;
+  line-height: 1.2;
+  color: #fff;
+}
+
+h1 {
+  font-family: var(--font-pixel);
+  font-size: clamp(14px, 2.2vw, 19px);
+  letter-spacing: 1px;
+}
+
+p {
+  margin: 0 0 1em;
+  color: var(--muted);
+}
+
+/* ---------- Hero + search ---------- */
+.hero {
+  padding: 4px 0 14px;
+}
+
+.hero p {
+  margin-bottom: 14px;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #171923;
+  border: 3px solid #2c3043;
+  border-radius: 12px;
+  padding: 10px 14px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.search:focus-within {
+  border-color: var(--key-blue);
+  box-shadow: 0 0 0 3px rgba(53, 163, 232, 0.25);
+}
+
+.search input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.search input::placeholder {
+  color: #6d7290;
+}
+
+/* ---------- Results meta ---------- */
+.results-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  padding: 2px 2px 12px;
+}
+
+/* ---------- Grid + cards ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(#1b1e2c, #151726);
+  border: 3px solid #2c3043;
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform 0.12s, border-color 0.12s, box-shadow 0.12s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  border-color: var(--red-hi);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.45);
+}
+
+.card-media {
+  display: block;
+  padding: 10px 10px 8px;
+}
+
+.card-sprite {
+  display: grid;
+  place-items: center;
+  min-height: 86px;
+  background: radial-gradient(circle at 50% 62%, rgba(224, 26, 40, 0.22), transparent 68%);
+  border-radius: 10px;
+}
+
+.card-sprite img {
+  height: 78px;
+  image-rendering: pixelated;
+}
+
+.card-name {
+  display: block;
+  margin-top: 8px;
+  color: #fff;
+  font-weight: 700;
+  text-transform: capitalize;
+  text-align: center;
+}
+
+.card-id {
+  display: block;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.card-btn {
+  margin: 0 10px 10px;
+  padding: 8px 10px;
+  border: 3px solid var(--outline);
+  border-radius: 10px;
+  font-family: var(--font-pixel);
+  font-size: 9px;
+  color: #fff;
+  background: linear-gradient(#f04350, #d61f2d);
+  box-shadow: 0 4px 0 var(--red-dark);
+  transition: transform 0.06s, box-shadow 0.06s;
+}
+
+.card-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--red-dark);
+}
+
+.card-btn.added {
+  background: linear-gradient(#5ccb6a, #37993f);
+  box-shadow: 0 4px 0 #1d5a24;
+  color: #08260f;
+}
+
+.card-btn.added:active {
+  box-shadow: 0 1px 0 #1d5a24;
+}
+
+/* ---------- Pokedex (collection) head ---------- */
+.pokedex-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+/* ---------- Empty states ---------- */
+.empty,
+.empty-state {
+  text-align: center;
+  color: var(--muted);
+  padding: 34px 16px;
+  grid-column: 1 / -1;
+}
+
+.empty-state h2 {
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.empty-state p {
+  margin-bottom: 16px;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-block;
+  padding: 10px 18px;
+  border: 3px solid var(--outline);
+  border-radius: 12px;
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  line-height: 1.6;
+  text-align: center;
+  transition: transform 0.06s, box-shadow 0.06s, filter 0.12s;
+}
+
+.btn:hover {
+  filter: brightness(1.07);
+}
+
+.btn:active {
+  transform: translateY(3px);
+}
+
+.btn.primary {
+  color: #fff;
+  background: linear-gradient(#f04350, #d61f2d);
+  box-shadow: 0 5px 0 var(--red-dark);
+}
+
+.btn.primary:active {
+  box-shadow: 0 1px 0 var(--red-dark);
+}
+
+.btn.primary.added {
+  background: linear-gradient(#5ccb6a, #37993f);
+  color: #08260f;
+  box-shadow: 0 5px 0 #1d5a24;
+}
+
+.btn.primary.added:active {
+  box-shadow: 0 1px 0 #1d5a24;
+}
+
+.btn.ghost {
+  color: var(--text);
+  background: #1b1e2c;
+  box-shadow: 0 5px 0 #0c0d14;
+}
+
+.btn.ghost:active {
+  box-shadow: 0 1px 0 #0c0d14;
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: 10px;
+  padding: 8px 14px;
+  border: 3px solid #2c3043;
+  border-radius: 10px;
+  color: var(--muted);
+  font-weight: 700;
+  background: #171923;
+  transition: color 0.12s, border-color 0.12s;
+}
+
+.back:hover {
+  color: #fff;
+  border-color: var(--red-hi);
+}
+
+/* ---------- Detail ---------- */
+.detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  background: linear-gradient(#1b1e2c, #151726);
+  border: 3px solid #2c3043;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.detail-body {
+  display: flex;
+}
+
+.detail-media {
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 50% 68%, rgba(224, 26, 40, 0.32), transparent 64%),
+    #10121c;
+  border: 3px solid #2c3043;
+  border-radius: 14px;
+  padding: 16px 30px;
+  width: auto;
+}
+
+.detail-media img {
+  max-width: 220px;
+  width: 100%;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 14px 20px rgba(0, 0, 0, 0.55));
+}
+
+.detail-id {
+  font-family: var(--font-pixel);
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--key-blue);
+  text-shadow: 0 0 8px rgba(53, 163, 232, 0.5);
+}
+
+.detail-info h1 {
+  margin-bottom: 12px;
+}
+
+.types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.type {
+  padding: 7px 18px;
+  border-radius: 999px;
+  border: 3px solid var(--outline);
+  color: #fff;
+  font-family: var(--font-pixel);
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  text-transform: capitalize;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.28);
+}
+
+.facts {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 40px;
+}
+
+.facts li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: 800;
+  color: #fff;
+}
+
+.facts .fact-value {
+  font-family: var(--font-pixel);
+  font-size: 13px;
+  color: #fff;
+}
+
+.fact-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+.abilities h3,
+.stats h2 {
+  font-family: var(--font-pixel);
+  font-size: 11px;
+  color: #fff;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.chip {
+  background: #171923;
+  border: 2px solid #2c3043;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  color: var(--text);
+  text-transform: capitalize;
+}
+
+/* ---------- Stats ---------- */
+.stats {
+  margin-top: 18px;
+  background: linear-gradient(#1b1e2c, #151726);
+  border: 3px solid #2c3043;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 46px;
+  align-items: center;
+  gap: 12px;
+  padding: 5px 0;
+}
+
+.stat-name {
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+.stat-bar {
+  height: 12px;
+  background: #10121c;
+  border: 2px solid #2c3043;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.stat-fill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #23a84a, var(--green-led) 70%, #b6f54c);
+  box-shadow: 0 0 10px rgba(60, 224, 106, 0.5);
+  border-radius: 999px;
+  transition: width 0.45s ease;
+}
+
+.stat-value {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+/* ---------- D-pad focused card (selection cursor) ---------- */
+.card.focused {
+  border-color: var(--green-led);
+  box-shadow: 0 0 0 3px rgba(60, 224, 106, 0.45), 0 0 22px rgba(60, 224, 106, 0.4);
+  transform: translateY(-3px);
+}
+
+/* ---------- Keypad favourite-slot indicator ---------- */
+.key.fav-filled {
+  position: relative;
+}
+
+.key.fav-filled::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  right: 6px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #0a7c2a;
+  border: 1.5px solid #062338;
+  box-shadow: 0 0 6px rgba(60, 224, 106, 0.85);
+}
+
+/* ---------- Lens as a HOME button ---------- */
+.lens {
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.06s, box-shadow 0.06s, filter 0.12s;
+}
+
+.lens:hover {
+  filter: brightness(1.08);
+}
+
+.lens:active {
+  transform: translateY(2px) scale(0.98);
+}
+
+/* ---------- Favourite slots (Pokémon screen) ---------- */
+.favslots {
+  margin-top: 18px;
+  background: linear-gradient(#1b1e2c, #151726);
+  border: 3px solid #2c3043;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.favslots-head p {
+  margin-bottom: 14px;
+  font-size: 0.88rem;
+}
+
+.favslots-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+
+.fav-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 6px;
+  border: 3px solid #2c3043;
+  border-radius: 12px;
+  background: #171923;
+  color: var(--muted);
+  transition: transform 0.06s, border-color 0.12s, box-shadow 0.12s, background 0.12s;
+}
+
+.fav-slot:hover {
+  border-color: var(--red-hi);
+}
+
+.fav-slot:active {
+  transform: translateY(2px);
+}
+
+.fav-slot-num {
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  color: #fff;
+}
+
+.fav-slot-name {
+  font-size: 0.78rem;
+  text-transform: capitalize;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fav-slot.filled {
+  border-color: var(--green-led);
+  background: #0f2416;
+  box-shadow: 0 0 12px rgba(60, 224, 106, 0.35);
+}
+
+.fav-slot.filled .fav-slot-name {
+  color: var(--green-led);
+}
+
+/* ---------- Right panel: stats screen (second screen) ---------- */
+.stats-screen {
+  margin-top: 0px;
+  padding: 2px 10px;
+  border: 5px solid var(--outline);
+  border-radius: 12px;
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.03) 0 2px, transparent 2px 4px),
+    #0b0c12;
+  box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.7);
+  font-family: var(--font-pixel);
+}
+
+.stats-screen-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 8px;
+  border-bottom: 1px dashed rgba(60, 224, 106, 0.25);
+}
+
+.stats-title {
+  font-size: 10px;
+  color: var(--green-led);
+  text-shadow: 0 0 8px rgba(60, 224, 106, 0.55);
+}
+
+.stats-pok {
+  font-size: 9px;
+  color: var(--green-led);
+  opacity: 0.8;
+  text-align: right;
+  text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-row-mini {
+  display: grid;
+  grid-template-columns: 78px 1fr 30px;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+}
+
+.stat-row-mini .stat-name {
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  text-transform: capitalize;
+  color: var(--green-led);
+  opacity: 0.9;
+}
+
+.stat-row-mini .stat-bar {
+  height: 10px;
+}
+
+.stat-row-mini .stat-value {
+  font-size: 9px;
+  color: #fff;
+}
+
+.stats-standby {
+  text-align: center;
+  padding: 22px 0;
+  font-size: 10px;
+  color: var(--green-led);
+  opacity: 0.6;
+}
+
+/* ---------- Spinner ---------- */
+.spinner {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 3px solid rgba(60, 224, 106, 0.25);
+  border-top-color: var(--green-led);
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Footer ---------- */
+.footer {
+  text-align: center;
+  color: #6d7290;
+  font-size: 0.85rem;
+  padding: 8px 16px 28px;
+}
+
+.footer a {
+  color: var(--key-blue);
+  font-weight: 600;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .device {
+    grid-template-columns: 1fr;
+    margin: 16px 12px;
+    padding: 20px;
+  }
+
+  .hinge {
+    height: 14px;
+    margin: 14px 6px;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.4),
+      rgba(0, 0, 0, 0.08) 40%,
+      rgba(0, 0, 0, 0.08) 60%,
+      rgba(0, 0, 0, 0.4)
+    );
+  }
+
+  .hinge-knob {
+    display: none;
+  }
+
+  .screen {
+    max-height: none;
+    min-height: 380px;
+  }
+
+  .panel {
+    padding: 4px 6px 8px;
+  }
+
+  .detail {
+    min-height: 340px;
+  }
+
+  .detail-media {
+    padding: 12px 22px;
+  }
+
+  .detail-media img {
+    width: 140px;
+  }
+}
+
+@media (max-width: 720px) {
+  .detail {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-row {
+    grid-template-columns: 96px 1fr 40px;
+  }
+
+  .controls {
+    flex-wrap: wrap;
+  }
+}
+
+/* ============================================================
+   Pulse-to-assign favourite slots · compact detail · data screen
+   ============================================================ */
+
+/* --- Compact detail: fits the screen height with no scrolling --- */
+.detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 400px;
+  padding: 14px;
+}
+
+.detail-media {
+  padding: 12px 26px;
+  width: auto;
+}
+
+.detail-media img {
+  width: 150px;
+  height: auto;
+}
+
+.detail-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: center;
+}
+
+.detail-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+/* Pokémon name must always fit — wrap/clip gracefully, never overflow. */
+.detail-name {
+  margin: 0;
+  font-family: var(--font-pixel);
+  font-size: 17px;
+  line-height: 1.4;
+  text-transform: capitalize;
+  color: #fff;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.types {
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.detail-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+}
+
+.detail-actions .btn {
+  flex: 1 1 auto;
+}
+
+/* Compact button variant (the re-sized "Add to Pokedex") */
+.btn.compact {
+    padding: 13px 0px;
+    font-size: 10px;
+    width: 100%;
+}
+
+/* Favourite (pin-to-slot) button states */
+.fav-btn {
+  color: #fff;
+  background: linear-gradient(#f04350, #d61f2d);
+  box-shadow: 0 5px 0 var(--red-dark);
+}
+
+.fav-btn.pinned {
+  background: linear-gradient(#5ccb6a, #37993f);
+  color: #08260f;
+  box-shadow: 0 5px 0 #1d5a24;
+}
+
+.fav-btn.assigning {
+  background: linear-gradient(#ffd35c, #e0a520);
+  color: #3a2a00;
+  box-shadow: 0 5px 0 #7a5a10;
+  animation: slot-pulse 0.9s ease-in-out infinite;
+}
+
+.assign-hint {
+  margin: 12px 0 0;
+  color: var(--green-led);
+  font-size: 0.82rem;
+}
+
+/* --- Keypad 1-6 pulse while picking a favourite slot --- */
+@keyframes slot-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 4px 0 var(--key-blue-deep),
+      0 0 0 0 rgba(60, 224, 106, 0);
+  }
+  50% {
+    box-shadow:
+      0 4px 0 var(--key-blue-deep),
+      0 0 0 4px rgba(60, 224, 106, 0.55),
+      0 0 20px rgba(60, 224, 106, 0.75);
+  }
+}
+
+.key.slot-pulse {
+  border-color: var(--green-led);
+  color: #eafff1;
+  animation: slot-pulse 0.9s ease-in-out infinite;
+}
+
+/* --- Expanded data screen (second screen) --- */
+.stat-rows {
+  display: block;
+}
+
+.stat-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(60, 224, 106, 0.25);
+}
+
+.stat-total .stat-value {
+  font-size: 13px;
+  color: #b6f54c;
+  text-shadow: 0 0 8px rgba(60, 224, 106, 0.55);
+}
+
+.stat-facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(60, 224, 106, 0.25);
+}
+
+.stat-facts > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.stat-facts .fact-label {
+  font-family: var(--font-pixel);
+  font-size: 7px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.stat-abilities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(60, 224, 106, 0.25);
+}
+
+/* Ability chips that are anime-iconic get a star highlight. */
+.stat-abilities .chip.anime {
+  border-color: var(--green-led);
+  color: #b6f54c;
+  text-shadow: 0 0 6px rgba(60, 224, 106, 0.5);
+}
+
+/* ============================================================
+   Anime-iconic reference (right DATA screen)
+   ============================================================ */
+.stat-anime {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(60, 224, 106, 0.25);
+}
+
+.stat-anime-head {
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  letter-spacing: 0.5px;
+  color: var(--green-led);
+  text-shadow: 0 0 8px rgba(60, 224, 106, 0.55);
+  margin-bottom: 8px;
+}
+
+.stat-anime-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.anime-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.anime-name {
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  text-transform: capitalize;
+  color: #cdd3e6;
+  overflow-wrap: anywhere;
+}
+
+.anime-why {
+  font-size: 9px;
+  line-height: 1.25;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.anime-item.match .anime-name {
+  color: #b6f54c;
+  text-shadow: 0 0 6px rgba(60, 224, 106, 0.5);
+}
+
+.anime-item.match .anime-why {
+  color: #dfe3f2;
+}
+
+.anime-match-note {
+  margin-top: 8px;
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  color: #b6f54c;
+  text-shadow: 0 0 8px rgba(60, 224, 106, 0.55);
+}
+
+.anime-none {
+  margin-top: 4px;
+  font-size: 9px;
+  font-style: italic;
+  color: var(--muted);
+}
+
+/* ============================================================
+   Detail screen: cry + shiny + animated sprite
+   ============================================================ */
+
+/* "Type" caption that sits before the type chips. */
+.types {
+  align-items: center;
+}
+
+.types-label {
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-right: 2px;
+}
+
+/* Cry + shiny action buttons. */
+.cry-btn {
+  color: #062338;
+  background: linear-gradient(#6cc0f5, var(--key-blue) 70%);
+  box-shadow: 0 5px 0 var(--key-blue-deep);
+}
+
+.cry-btn.playing {
+  color: #08260f;
+  background: linear-gradient(#5ccb6a, #37993f);
+  box-shadow: 0 5px 0 #1d5a24;
+  animation: cry-beat 0.6s ease-in-out infinite;
+}
+
+.shiny-btn {
+  color: #3a2a00;
+  background: linear-gradient(#ffd35c, #e0a520);
+  box-shadow: 0 5px 0 #7a5a10;
+}
+
+.shiny-btn.on {
+  color: #fff;
+  background: linear-gradient(#c78bff, #8a4fd6);
+  box-shadow: 0 5px 0 #4d2a80;
+}
+
+.cry-btn:disabled,
+.shiny-btn:disabled {
+  opacity: 0.4;
+  filter: grayscale(0.6);
+  cursor: not-allowed;
+}
+
+@keyframes cry-beat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+/* Animated (floating) sprite + shiny glow. */
+.detail-media {
+  position: relative;
+}
+
+.detail-media img {
+  animation: sprite-float 2.6s ease-in-out infinite;
+}
+
+.detail-media img.shiny {
+  filter: drop-shadow(0 14px 20px rgba(0, 0, 0, 0.55)) hue-rotate(-18deg) saturate(1.15);
+}
+
+.detail-media .spark {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  color: #ffe27a;
+  font-size: 16px;
+  text-shadow: 0 0 10px rgba(255, 226, 122, 0.9);
+  animation: spark-twinkle 1.2s ease-in-out infinite;
+}
+
+@keyframes sprite-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes spark-twinkle {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.3) rotate(20deg);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .detail-media img,
+  .detail-media .spark,
+  .cry-btn.playing,
+  .fav-btn.assigning {
+    animation: none !important;
+  }
+}

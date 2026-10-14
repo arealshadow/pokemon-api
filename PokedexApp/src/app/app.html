@@ -1,0 +1,162 @@
+<div class="device">
+  <!-- ================= Left half: lens, LEDs, screen, D-pad ================= -->
+  <section class="panel panel-left" aria-label="Pokédex screen">
+    <div class="panel-top">
+      <button class="lens" type="button" aria-label="Home — My Pokédex" title="Home" (click)="goHome()"></button>
+      <div class="leds" aria-hidden="true">
+        <span class="led red" [class.lit]="service.detailError()"></span>
+        <span class="led amber" [class.lit]="service.loadingNames()"></span>
+        <span class="led green" [class.lit]="!service.loadingNames()"></span>
+      </div>
+    </div>
+
+    <div class="screen-frame">
+      <div class="eyes" aria-hidden="true"><span class="eye"></span><span class="eye"></span></div>
+      <main class="screen">
+        <router-outlet />
+      </main>
+    </div>
+
+    <div class="controls">
+      <div class="dpad" role="group" aria-label="Directional pad — navigate">
+        <button class="dpad-btn up" aria-label="Up" (click)="dpad('up')"></button>
+        <button class="dpad-btn left" aria-label="Left" (click)="dpad('left')"></button>
+        <span class="dpad-center" aria-hidden="true"></span>
+        <button class="dpad-btn down" aria-label="Down" (click)="dpad('down')"></button>
+        <button class="dpad-btn right" aria-label="Right" (click)="dpad('right')"></button>
+      </div>
+
+      <div class="pills" aria-hidden="true">
+        <span class="pill red"></span>
+        <span class="pill blue"></span>
+      </div>
+
+      <div class="ab" role="group" aria-label="A and B buttons">
+        <button class="ab-btn b" aria-label="B — back" (click)="bAction()">B</button>
+        <button class="ab-btn a" aria-label="A — select" (click)="aAction()">A</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Hinge ================= -->
+  <div class="hinge" aria-hidden="true"><span class="hinge-knob"></span></div>
+
+  <!-- ================= Right half: status screen + keypad ================= -->
+  <section class="panel panel-right" aria-label="Pokédex controls">
+    <div class="status-screen" role="status">
+      <div class="status-line">
+        <span class="status-key">POKÉDEX</span>
+        <span class="status-value">{{ status() }}</span>
+      </div>
+      <div class="status-line">
+        <span class="status-key">MODE</span>
+        <span class="status-value">{{ mode() }}</span>
+      </div>
+      <div class="status-line">
+        <span class="status-key">COLLECTED</span>
+        <span class="status-value">{{ service.pokedex().length }}/{{ maxId }}</span>
+      </div>
+      <div class="status-line">
+        <span class="status-key">NOW</span>
+        <span class="status-value">
+          @if (currentId(); as id) { #{{ id }} {{ currentName() }} } @else { — STANDBY — }
+        </span>
+      </div>
+    </div>
+
+    <div class="keypad" role="group" aria-label="Keypad">
+      <button class="key" (click)="goHome()">HOME</button>
+      <button class="key" (click)="goSearch()">SEARCH</button>
+      <button class="key" (click)="random()">RANDOM</button>
+      <button class="key" (click)="clearAll()">CLEAR</button>
+      <button class="key" (click)="prev()">PREV</button>
+      <button class="key" (click)="next()">NEXT</button>
+      @for (id of jumpKeys; track id) {
+        @let fav = service.favAt(id);
+        <button
+          class="key key-number"
+          [class.fav-filled]="!!fav"
+          [class.slot-pulse]="isAssigning()"
+          [attr.aria-label]="
+            fav
+              ? 'Favourite slot ' + id + ': ' + fav.name
+              : isAssigning()
+                ? 'Assign current Pokémon to slot ' + id
+                : 'Favourite slot ' + id + ' (empty — pin a Pokémon here)'
+          "
+          (click)="loadSlot(id)"
+        >
+          {{ (id < 10 ? '0' : '') + id }}
+        </button>
+      }
+    </div>
+
+    <div class="speaker" aria-hidden="true">
+      <span class="speaker-pad"></span>
+      <span class="speaker-pad"></span>
+    </div>
+
+    <!-- Second screen: live stats + extra data for the current Pokémon. -->
+    <div class="stats-screen" role="region" aria-label="Pokémon data">
+      @if (currentDetail(); as d) {
+        <div class="stat-rows">
+          @for (s of d.stats; track s.stat.name) {
+            <div class="stat-row-mini">
+              <span class="stat-name">{{ s.stat.name }}</span>
+              <div class="stat-bar">
+                <span class="stat-fill" [style.width.%]="barWidth(s.base_stat)"></span>
+              </div>
+              <span class="stat-value">{{ s.base_stat }}</span>
+            </div>
+          }
+        </div>
+
+        <div class="stat-total">
+          <span class="stat-name">BASE TOTAL</span>
+          <span class="stat-value">{{ baseStatTotal() }}</span>
+        </div>
+
+        <div class="stat-facts">
+          <div><span class="fact-label">Height</span>{{ heightLabel() }}</div>
+          <div><span class="fact-label">Weight</span>{{ weightLabel() }}</div>
+          <div><span class="fact-label">Base XP</span>{{ d.base_experience }}</div>
+        </div>
+
+        <div class="stat-abilities">
+          @for (a of d.abilities; track a.ability.name) {
+            <span
+              class="chip"
+              [class.anime]="isAnimeIconic(a.ability.name)"
+              [title]="animeNote(a.ability.name)"
+            >{{ isAnimeIconic(a.ability.name) ? '★ ' : '' }}{{ a.ability.name }}{{ a.is_hidden ? ' (hidden)' : '' }}</span>
+          }
+        </div>
+
+        <div class="stat-anime">
+          <div class="stat-anime-head">ANIME ICONIC</div>
+          @let matches = animeMatches(d);
+          @if (matches.length) {
+            <div class="stat-anime-list">
+              @for (item of matches; track item.name) {
+                <div class="anime-item match">
+                  <span class="anime-name">★ {{ item.name }}</span>
+                  <span class="anime-why">{{ item.why }}</span>
+                </div>
+              }
+            </div>
+            <div class="anime-match-note">★ Famous from the anime!</div>
+          } @else {
+            <div class="anime-none">No famous anime abilities for this one.</div>
+          }
+        </div>
+      } @else {
+        <div class="stats-standby">— NO DATA —</div>
+      }
+    </div>
+  </section>
+</div>
+
+<footer class="footer">
+  Built with Angular 22 · Data &amp; sprites from
+  <a href="https://pokeapi.co" target="_blank" rel="noopener">PokéAPI</a>
+</footer>
